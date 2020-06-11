@@ -25,6 +25,7 @@ export default class HotReloaderServer {
     let id = req.url.match(/^\/([^\/]*)/)[1]
     driver.io.write(head)
     this.sockets[id] = driver
+    socket.on('error', err => warn(err))
     socket.pipe(driver.io).pipe(socket)
     driver.messages.on('data', data => this.message(data, id))
     driver.on('close', () => delete this.sockets[id])
